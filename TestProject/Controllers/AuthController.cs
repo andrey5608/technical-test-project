@@ -1,10 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TestProject.DataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Microsoft.AspNetCore.Routing;
+using System.Collections.Specialized;
+using Microsoft.AspNetCore.Http;
 
 namespace TestProject.Controllers
 {
@@ -25,31 +29,31 @@ namespace TestProject.Controllers
 			public string Token { get; set; }
 		}
 
-		[HttpPost("[action]")]
-		public async Task<IActionResult> Login([FromBody] Account account)
-		{
-			if (account == null
-				|| string.IsNullOrEmpty(account.Token)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login([FromBody] Account account)
+        {
+            if (account == null
+                || string.IsNullOrEmpty(account.Token)
                 || !Guid.TryParse(account.Token, out Guid token)
-				|| !(await this.tokenRepository.IsValidTokenAsync(token)))
-			{
+                || !(await this.tokenRepository.IsValidTokenAsync(token)))
+            {
                 ModelState.AddModelError("login_failure", "Invalid token.");
-			}
+            }
 
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-			var claims = new List<Claim>
-			{
-				new Claim(ClaimTypes.Name, account.Token)
-			};
-			var userIdentity = new ClaimsIdentity(claims, "login");
-			var principal = new ClaimsPrincipal(userIdentity);
-			await HttpContext.SignInAsync(principal);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, account.Token)
+            };
+            var userIdentity = new ClaimsIdentity(claims, "login");
+            var principal = new ClaimsPrincipal(userIdentity);
+            await HttpContext.SignInAsync(principal);
 
-			return new OkObjectResult(account.Token);
-		}
-	}
+            return new OkObjectResult(account.Token);
+        }
+    }
 }

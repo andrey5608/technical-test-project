@@ -23,9 +23,7 @@ namespace TestProject.Tests.Controllers
 
         public AuthControllerTests()
         {
-            _mockRepo = new Mock<ITokenRepository>();            
-            _catManContext = new CategoriesManagementContext();
-            _tokenRepo = new TokenRepository(_catManContext);
+            _mockRepo = new Mock<ITokenRepository>();
             _account = new Account
             {
                 Token = "00000000-0000-0000-0000-000000000000"

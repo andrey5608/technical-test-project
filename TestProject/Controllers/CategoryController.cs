@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ namespace TestProject.Controllers
 		[Route("[action]/{id}")]
 		public async Task<ActionResult> Details(string id)
 		{
-			if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out Guid categoryId))
+			if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var categoryId))
             {
                 return new BadRequestResult();
             }
@@ -74,7 +74,7 @@ namespace TestProject.Controllers
 		[HttpDelete("[action]/{id}")]
 		public async Task<ActionResult> Delete(string id)
 		{
-			if (!Guid.TryParse(id, out Guid categoryId))
+			if (!Guid.TryParse(id, out var categoryId))
             {
                 return new BadRequestResult();
             }

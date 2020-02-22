@@ -34,7 +34,7 @@ namespace TestProject.Controllers
         {
             if (account == null
                 || string.IsNullOrEmpty(account.Token)
-                || !Guid.TryParse(account.Token, out Guid token)
+                || !Guid.TryParse(account.Token, out var token)
                 || !(await this.tokenRepository.IsValidTokenAsync(token)))
             {
                 ModelState.AddModelError("login_failure", "Invalid token.");

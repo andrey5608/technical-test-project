@@ -18,8 +18,6 @@ namespace TestProject.Tests.Controllers
         private Mock<ITokenRepository> _mockRepo;
         private AuthController _controller;
         private readonly Account _account;
-        private readonly CategoriesManagementContext _catManContext;
-        private readonly TokenRepository _tokenRepo;
 
         public AuthControllerTests()
         {

@@ -9,10 +9,11 @@ using Moq;
 using NUnit.Framework;
 using TestProject.Controllers;
 using TestProject.DataAccess;
-using TestProject.Models;
 
-namespace TestProject.Tests.Controllers
+namespace TestProject.Tests.Controllers.UnitTests
 {
+    [TestFixture]
+    [Category("CategoryControllerUnitTests")]
     class CategoryControllerTests
     {
         private Mock<IGenericRepository<DataAccess.Category>> _categoryRepository;

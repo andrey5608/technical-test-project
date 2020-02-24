@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Authentication;
 
-namespace TestProject.Tests.Controllers
+namespace TestProject.Tests.Controllers.UnitTests
 {
+    [TestFixture]
+    [Category("AuthControllerUnitTests")]
     class AuthControllerTests
     {
         private Mock<ITokenRepository> _mockRepo;

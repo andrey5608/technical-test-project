@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using TestProject.Models;
 using System;
+using FluentAssertions;
 
 namespace TestProject.IntegrationTests
 {
@@ -22,6 +23,13 @@ namespace TestProject.IntegrationTests
         {
             _factory = new WebAppFactory();
             _client = _factory.CreateClient();
+        }
+
+        [SetUp]
+        public void PerformLogIn()
+        {
+            PerformLogin(ValidTokenAsAString).Result.StatusCode.Should().Be(HttpStatusCode.OK);
+            // Before each test we need to log in successfully
         }
 
         private async Task<HttpResponseMessage> PerformLogin(string tokenAsAString)
@@ -49,8 +57,7 @@ namespace TestProject.IntegrationTests
         [Test]
         public async Task WhenSomeCategoryIsCreatedThenResultIsOk()
         {
-            // Arrange
-            await PerformLogin(ValidTokenAsAString);
+            // Arrange            
             var category = new Category
             {
                 CategoryId = Guid.NewGuid(),
@@ -68,7 +75,6 @@ namespace TestProject.IntegrationTests
         public async Task WhenWrongModelIsProvidedThenTheResultIsBadRequest()
         {
             // Arrange
-            await PerformLogin(ValidTokenAsAString);
             var category = "category name described in wrong format";
             // Act
             var result = await PostAsJsonAsync(category, "/api/Category/Create");
@@ -80,7 +86,6 @@ namespace TestProject.IntegrationTests
         public async Task WhenWeDeleteSomeCategoryThenResultIsOk()
         {
             // Arrange
-            await PerformLogin(ValidTokenAsAString);
             var category = new Category
             {
                 CategoryId = Guid.NewGuid(),
@@ -101,7 +106,6 @@ namespace TestProject.IntegrationTests
         public async Task WhenWeTryingToDeleteCategoryWithNonGuidIdThenResultIsBadRequest()
         {
             // Arrange
-            await PerformLogin(ValidTokenAsAString);
             var invalidId = "itIsAnInvalidId";
 
             // Act
@@ -115,7 +119,6 @@ namespace TestProject.IntegrationTests
         public async Task WhenWeTryToDeleteAlreadyDeletedCategoryThenResultIsInternalServerError()
         {
             // Arrange
-            await PerformLogin(ValidTokenAsAString);
             var category = new Category
             {
                 CategoryId = Guid.NewGuid(),
@@ -144,6 +147,8 @@ namespace TestProject.IntegrationTests
              * and after that modification we need to change expected result of this test.
              */
         }
+
+        // TODO: Implement Unauthorized deleting etc
 
         [OneTimeTearDown]
         public void DisposeFactoryAndHttpClient()
